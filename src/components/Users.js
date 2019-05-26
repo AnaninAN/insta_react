@@ -35,15 +35,17 @@ export default class Users extends Component {
 
     renderItems(arr) {
         return arr.map((item) => {
-            const {name, altname, photo} = item;
+            const {name, altname, photo, id} = item;
 
             return (
-                <User
-                    src={photo}
-                    alt={altname}
-                    name={name}
-                    min
-                />
+                <div key={id}>
+                    <User
+                        src={photo}
+                        alt={altname}
+                        name={name}
+                        min
+                    />
+                </div>
             )
         });
     }
