@@ -33,7 +33,7 @@ export default class Users extends Component {
         });
     }
 
-    renderItems(arr) {
+    renderUsers(arr) {
         return arr.map((item) => {
             
             return (
@@ -49,21 +49,33 @@ export default class Users extends Component {
         });
     }
 
+    renderMe(arr) {
+        return arr.map((item) => {
+            if (item.id === "1")
+                return (
+                    <div key={item.id}>
+                        <User
+                            src={item.photo}
+                            alt={item.altname}
+                            name={item.name}
+                        />
+                    </div>
+                )
+        });
+    }
+
     render () {
         const {error, users} = this.state;
         if (error) {
             return <ErrorMessage/>
         }
-
-        const items = this.renderItems(users);
+    
+        const items = this.renderUsers(users);
+        const me = this.renderMe(users);
 
         return (
             <div className="right">
-                <User
-                    src="https://images11.popmeh.ru/upload/img_cache/914/91427743b02f0a60c4ea86c69837b357_ce_1200x640x0x26_cropped_800x427.jpg"
-                    alt="ananin_an"
-                    name="ananin_an"
-                />
+                {me}
                 <div className="users__block">
                     {items}
                 </div>
