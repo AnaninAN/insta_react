@@ -1,12 +1,73 @@
 import React, {Component} from 'react';
-import Post from './Post';
+import User from './User';
+import InstaService from '../services/instaservice';
+import ErrorMessage from './ErrorMessage';
 
 export default class Posts extends Component {
+    InstaService = new InstaService();
+    state = {
+        posts: [],
+        error: false
+    }
+
+    componentDidMount() {
+        this.updatePosts();
+    }
+
+    updatePosts() {
+        this.InstaService.getAllPosts()
+        .then(this.onPostsLoaded)
+        .catch(this.onError);
+    }
+
+    onPostsLoaded = (posts) => {
+         this.setState({
+             posts,
+             error: false
+         });
+    }
+
+    onError = (err) => {
+        this.setState({
+            error: true
+        });
+    }
+
+    renderItems(arr) {
+        return arr.map((item) => {
+            const {name, altname, photo, src, alt, descr, id} = item;
+
+            return (
+                <div key={id} className="post">
+                    <User
+                        src={photo}
+                        alt={altname}
+                        name={name}
+                        min
+                    />
+                    <img src={src} alt={alt}></img>
+                    <div className="post__name">
+                        {name}
+                    </div>
+                    <div className="post__descr">
+                        {descr}
+                    </div>
+                </div>
+            )
+        });
+    }
+    
     render() {
+        const {error, posts} = this.state;
+        if (error) {
+            return <ErrorMessage/>
+        }
+
+        const items = this.renderItems(posts);
+
         return (
             <div className="left">
-                <Post alt="nature" src="https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"/>
-                <Post alt="nature" src="http://images.france.fr/zeaejvyq9bhj/4VGVbWT4kwsIyqaIuyiYs2/69b40a00fddb2b2c26ebd472fa6e4186/nature_dordogne.jpg?w=1200&h=630&q=70&fl=progressive&fit=fill"/>
+                {items}
             </div>
         )
     }

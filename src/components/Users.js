@@ -1,40 +1,72 @@
-import React from 'react';
+import React, {Component} from 'react';
 import User from './User';
+import InstaService from '../services/instaservice';
+import ErrorMessage from './ErrorMessage';
 
-export default function Users() {
-    return (
-        <div className="right">
-            <User
-                src="http://static1.repo.aif.ru/1/b2/762139/fcbf24c503219775ad5a43aab46194e4.jpg"
-                alt="prince"
-                name="user_prince"
-            />
-            <div className="users__block">
+export default class Users extends Component {
+    InstaService = new InstaService();
+    state = {
+        users: [],
+        error: false
+    }
+
+    componentDidMount() {
+        this.updatePosts();
+    }
+
+    updatePosts() {
+        this.InstaService.getAllPosts()
+        .then(this.onPostsLoaded)
+        .catch(this.onError);
+    }
+
+    onPostsLoaded = (users) => {
+         this.setState({
+             users,
+             error: false
+         });
+    }
+
+    onError = (err) => {
+        this.setState({
+            error: true
+        });
+    }
+
+    renderItems(arr) {
+        return arr.map((item) => {
+            const {name, altname, photo} = item;
+
+            return (
                 <User
-                    src="http://static1.repo.aif.ru/1/b2/762139/fcbf24c503219775ad5a43aab46194e4.jpg"
-                    alt="prince"
-                    name="user_prince"
+                    src={photo}
+                    alt={altname}
+                    name={name}
                     min
                 />
+            )
+        });
+    }
+
+    render () {
+        const {error, users} = this.state;
+        if (error) {
+            return <ErrorMessage/>
+        }
+
+        const items = this.renderItems(users);
+
+        return (
+            <div className="right">
                 <User
-                    src="http://static1.repo.aif.ru/1/b2/762139/fcbf24c503219775ad5a43aab46194e4.jpg"
-                    alt="prince"
-                    name="user_prince"
-                    min
+                    src="https://images11.popmeh.ru/upload/img_cache/914/91427743b02f0a60c4ea86c69837b357_ce_1200x640x0x26_cropped_800x427.jpg"
+                    alt="ananin_an"
+                    name="ananin_an"
                 />
-                <User
-                    src="http://static1.repo.aif.ru/1/b2/762139/fcbf24c503219775ad5a43aab46194e4.jpg"
-                    alt="prince"
-                    name="user_prince"
-                    min
-                />
-                <User
-                    src="http://static1.repo.aif.ru/1/b2/762139/fcbf24c503219775ad5a43aab46194e4.jpg"
-                    alt="prince"
-                    name="user_prince"
-                    min
-                /> 
+                <div className="users__block">
+                    {items}
+                </div>
             </div>
-        </div>
-    )
+        )
+    }
 }
