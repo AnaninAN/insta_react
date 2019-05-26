@@ -15,13 +15,13 @@ export default class Users extends Component {
     }
 
     updatePosts() {
-        this.InstaService.getAllPosts()
+        this.InstaService.getAllUsers()
         .then(this.onPostsLoaded)
         .catch(this.onError);
     }
 
     onPostsLoaded = (users) => {
-         this.setState({
+        this.setState({
              users,
              error: false
          });
