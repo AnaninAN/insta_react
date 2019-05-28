@@ -4,7 +4,7 @@ import InstaService from '../services/instaservice';
 import ErrorMessage from './ErrorMessage';
 
 export default class Users extends Component {
-    InstaService = new InstaService();
+InstaService = new InstaService();
     state = {
         users: [],
         error: false
@@ -16,11 +16,11 @@ export default class Users extends Component {
 
     updateUsers() {
         this.InstaService.getAllUsers()
-        .then(this.onPostsLoaded)
+        .then(this.onUsersLoaded)
         .catch(this.onError);
     }
 
-    onPostsLoaded = (users) => {
+    onUsersLoaded = (users) => {
         this.setState({
              users,
              error: false
@@ -50,18 +50,13 @@ export default class Users extends Component {
     }
 
     renderMe(arr) {
-        return arr.map((item) => {
-            if (item.id === "1")
-                return (
-                    <div key={item.id}>
-                        <User
-                            src={item.photo}
-                            alt={item.altname}
-                            name={item.name}
-                        />
-                    </div>
-                )
-        });
+        return (
+            <User
+                src="https://cdn.thedailymash.co.uk/wp-content/uploads/20190324205530/man-serious-2.jpg"
+                alt="Man"
+                name="some_cool_man"
+            />
+        );
     }
 
     render () {
@@ -70,8 +65,8 @@ export default class Users extends Component {
             return <ErrorMessage/>
         }
     
-        const items = this.renderUsers(users);
         const me = this.renderMe(users);
+        const items = this.renderUsers(users);
 
         return (
             <div className="right">

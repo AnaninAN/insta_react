@@ -2,7 +2,7 @@ import React from 'react';
 import Posts from './Posts';
 import Users from './Users';
 
-export default function Feed() {
+const Feed = () => {
     return (
         <div className="container feed">
             <Posts/>
@@ -10,3 +10,5 @@ export default function Feed() {
         </div>
     )
 }
+
+export default Feed;
