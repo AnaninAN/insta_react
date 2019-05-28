@@ -2,35 +2,39 @@ import React, {Component} from 'react';
 import User from './User';
 import InstaService from '../services/instaservice';
 import ErrorMessage from './ErrorMessage';
+import Loading from './Loading';
 
 export default class Users extends Component {
-InstaService = new InstaService();
+InstaService = new InstaService()
     state = {
         users: [],
-        error: false
+        error: false,
+        load: true
     }
 
     componentDidMount() {
-        this.updateUsers();
+        this.updateUsers()
     }
 
     updateUsers() {
         this.InstaService.getAllUsers()
         .then(this.onUsersLoaded)
-        .catch(this.onError);
+        .catch(this.onError)
     }
 
     onUsersLoaded = (users) => {
         this.setState({
              users,
-             error: false
-         });
+             error: false,
+             load: false
+         })
     }
 
     onError = (err) => {
         this.setState({
-            error: true
-        });
+            error: true,
+            load: false
+        })
     }
 
     renderUsers(arr) {
@@ -46,7 +50,7 @@ InstaService = new InstaService();
                     />
                 </div>
             )
-        });
+        })
     }
 
     renderMe(arr) {
@@ -56,17 +60,20 @@ InstaService = new InstaService();
                 alt="Man"
                 name="some_cool_man"
             />
-        );
+        )
     }
 
     render () {
-        const {error, users} = this.state;
+        const {error, users, load} = this.state
         if (error) {
             return <ErrorMessage/>
         }
+        if (load) {
+            return <Loading/>
+        }
     
-        const me = this.renderMe(users);
-        const items = this.renderUsers(users);
+        const me = this.renderMe(users)
+        const items = this.renderUsers(users)
 
         return (
             <div className="right">
